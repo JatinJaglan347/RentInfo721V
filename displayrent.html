@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <link rel="shortcut icon" type="x-icon" href="logo.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="displayrent.css">
+    <title>Room Rent</title>
+</head>
+<body>
+    <div class="container">
+        <h2>Room Rent</h2>
+        <div class="form-group">
+            <label for="roomCode">Room Number:</label>
+              <select id="roomCode" name="roomCode" required>
+                  <option value="">Select a Room-No</option>
+                  <option value="AJQER11">Room1</option>
+                  <option value="IWERJ22">Room2</option>
+                  <option value="QUTHB33">Room3</option>
+                  <option value="IRHEN44">Room4</option>
+                  <option value="DIRHF55">Room5</option>
+                  <option value="NJEIW66">Room6</option>
+                  <option value="KUCNR77">Room7</option>
+              </select>
+        </div>
+        <button id="fetchData">Fetch Rent</button>
+        <div id="loading" style="display: none;">Loading...</div>
+        <div id="dataDisplay"></div>
+    </div>
+    
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $("#fetchData").click(function () {
+            var roomCode = $("#roomCode").val();
+            
+            // Show the loading message
+            $("#loading").show();
+            
+            $.get("https://script.google.com/macros/s/AKfycbxCYaIqJMdx0FtZOW2-8YOzBeUZzO4pjTHM88DSKxROoJuJ8mejuxdJDEqbRGP-ihb8VQ/exec?sheetName=" + roomCode, function (response) {
+                if (response && response.data && Array.isArray(response.data) && response.data.length > 0) {
+                    var data = response.data[0]; // Extract the first row of data
+    
+                    // Assign names to the data elements
+                    var roomCode = data[0];
+                    var rent = data[1];
+                    var water = data[2];
+                    var cleanliness = data[3];
+                    var units = data[4];
+                    var unitsConsumed = data[5];
+                    var unitPrice = data[6];
+                    var electricityPrice = data[7];
+                    var fine = data[8];
+                    var month = data[9];
+                    var total = data[10];
+    
+                    // Display the data in HTML
+                    //html += "<h3>Room Information for Room Code: " + roomCode + "</h3>";
+                    var html = "<table>";
+                    html +="<tr><td style='font-weight: bold; font-size: 1.7em; text-align: center;'>" + month +  " Rent</td></tr>" ;
+                    html +="<tr><td style='font-weight: bold; font-size: 1.7em; text-align: center;'>Room Code: " + roomCode +  "</td></tr>" ;
+                    html += "</table>";
+                    html += "<table>";
+                    //html += "<tr><th>Attribute</th><th>Prise</th></tr>";
+                    html += "<tr><td>Rent</td><td> ₹" + rent + "</td></tr>";
+                    html += "<tr><td>Water</td><td> ₹" + water + "</td></tr>";
+                    html += "<tr><td>Cleanliness</td><td> ₹" + cleanliness + "</td></tr>";
+                    html += "<tr><td>Units</td><td>" + units + "</td></tr>";
+                    html += "<tr><td>Units Consumed</td><td>" + unitsConsumed + "</td></tr>";
+                    html += "<tr><td>Unit Price</td><td> ₹" + unitPrice + "</td></tr>";
+                    html += "<tr><td>Electricity Bill</td><td> ₹" + electricityPrice + "</td></tr>";
+                    html += "<tr><td>Fine</td><td> ₹" + fine + "</td></tr>";
+                    //html += "<tr><td>Month</td><td>" + month + "</td></tr>";
+                    //html += "<tr><td>Total</td><td> ₹" + total + "</td></tr>";
+                    html += "<tr><td style='font-weight: bold; font-size: 1.2em;'>Total</td><td style='font-weight: bold; font-size: 1.2em;'> ₹" + total + "</td></tr>";
+                    html += "</table>";
+    
+                    $("#dataDisplay").html(html);
+                    
+                    // Hide the loading message
+                    $("#loading").hide();
+                } else {
+                    $("#dataDisplay").html("Room data not found.");
+                    // Hide the loading message
+                    $("#loading").hide();
+                }
+            });
+        });
+    });
+    
+</script>
+    
+</body>
+</html>
